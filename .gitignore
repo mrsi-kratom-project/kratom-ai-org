@@ -1,0 +1,19 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.env
+
+# Docker and OS files
+.DS_Store
+.dockerignore
+
+# IDE settings
+.vscode/
+.idea/
+
+# Database/Data files (if you start storing raw data here)
+data/*.sqlite
+data/*.db
