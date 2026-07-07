@@ -23,22 +23,16 @@ jobs:
       with:
         workload_identity_provider: 'projects/970498681695/locations/global/workloadIdentityPools/kratom-ai-serv-identity/providers/kratom-serv-access1'
         service_account: 'kratom-service-acc1@kratom-ai-ocr.iam.gserviceaccount.com'
+        token_format: 'access_token'
 
     # Step 2: Set up Cloud SDK to make calling APIs easier
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-
-# 3. RUN THE REST API TEST USING IDENTIFIED RESOURCE PATHS
     - name: Query Specific Document AI Processor
       run: |
         echo "Successfully assumed identity of the service account!"
         echo "Querying your active OCR Processor: kratom-doc-ocr1"
         
-        # Fetch the active, short-lived OAuth2 access token
-        TOKEN=$(gcloud auth print-access-token)
-        
-        # Hit your exact process Endpoint URL to make sure it responds natively
+        # We can now natively pull the token from the previous step's output variable!
         curl -X GET \
-          -H "Authorization: Bearer $TOKEN" \
+          -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
           -H "Content-Type: application/json" \
           "https://us-documentai.googleapis.com/v1/projects/970498681695/locations/us/processors/1f3c203d4ff7ddc1"
