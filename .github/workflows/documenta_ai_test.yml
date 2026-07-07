@@ -1,0 +1,38 @@
+name: Verify GCP Access and Run Document AI
+
+on:
+  push:
+    branches: [ main ]
+
+# CRITICAL: This grants GitHub Actions permission to request the OIDC token
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  auth-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # Step 1: Exchange GitHub OIDC token for a short-lived GCP token
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: 'projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPools/kratom-ai-serv-identity/providers/kratom-serv-access1'
+        service_account: 'kratom-service-acc1@kratom-ai-ocr.iam.gserviceaccount.com'
+
+    # Step 2: Set up Cloud SDK to make calling APIs easier
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    # Step 3: Test access by calling the Document AI API via gcloud CLI
+    - name: Verify Document AI Connection
+      run: |
+        echo "Successfully authenticated as service account!"
+        gcloud auth list
+        
+        # Simple curl call or gcloud command to check Document AI processors
+        gcloud document-ai processors list --location="us"
