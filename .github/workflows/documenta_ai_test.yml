@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.2.2
 
     # Step 1: Exchange GitHub OIDC token for a short-lived GCP token
     - name: Authenticate to Google Cloud
