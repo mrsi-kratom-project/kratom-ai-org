@@ -28,11 +28,14 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
-    # Step 3: Test access by calling the Document AI API via gcloud CLI
-    - name: Verify Document AI Connection
+# 3. RUN THE TEST
+    - name: Describe Document AI Processor
       run: |
-        echo "Successfully authenticated as service account!"
-        gcloud auth list
+        echo "Successfully assumed identity of the service account!"
         
-        # Simple curl call or gcloud command to check Document AI processors
-        gcloud document-ai processors list --location="us"
+        # Replace these with your actual Processor ID and Location (e.g., us or eu)
+        PROCESSOR_ID="1f3c203d4ff7ddc1"
+        LOCATION="us" 
+        
+        # This command queries the Document AI API to get information about your processor
+        gcloud document-ai processors describe $PROCESSOR_ID --location=$LOCATION
